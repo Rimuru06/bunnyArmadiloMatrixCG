@@ -1,11 +1,9 @@
 export default class Camera {
   constructor(gl) {
-    // Posição da camera
     this.eye = vec3.fromValues(1.0, 1.0, 1.0);
     this.at  = vec3.fromValues(0.0, 0.0, 0.0);
     this.up  = vec3.fromValues(0.0, 1.0, 0.0);
 
-    // Parâmetros da projeção
     this.fovy = Math.PI / 2;
     this.aspect = gl.canvas.width / gl.canvas.height;
 
@@ -15,9 +13,8 @@ export default class Camera {
     this.bottom = -2.5;
 
     this.near = 0;
-    this.far = 5;
+    this.far = 1;
 
-    // Matrizes View e Projection
     this.view = mat4.create();
     this.proj = mat4.create();
   }
@@ -33,7 +30,6 @@ export default class Camera {
   updateViewMatrix() {
     mat4.identity( this.view );
     mat4.lookAt(this.view, this.eye, this.at, this.up);
-    // TODO: Tentar implementar as contas diretamente
   }
 
   updateProjectionMatrix(type = '') {

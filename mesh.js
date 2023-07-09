@@ -6,20 +6,16 @@ import { HalfEdgeDS } from './half-edge.js';
 
 export default class Mesh {
   constructor(delta) {
-    // model data structure
     this.heds = new HalfEdgeDS();
 
-    // Matriz de modelagem
     this.angle = 0;
     this.delta = delta;
     this.model = mat4.create();
 
-    // Shader program
     this.vertShd = null;
     this.fragShd = null;
     this.program = null;
 
-    // Data location
     this.vaoLoc = -1;
     this.indicesLoc = -1;
 
@@ -27,7 +23,6 @@ export default class Mesh {
     this.uViewLoc = -1;
     this.uProjectionLoc = -1;
 
-    // texture
     this.colorMap = [];
     this.colorMapLoc = -1;
 
@@ -47,10 +42,14 @@ export default class Mesh {
       if (elements[0] == 'v') {
         elements.shift();
         elements.push('1.0')
-        if (name == 'stanford-armadillo.obj')
-          coords.push(elements.map(x => parseFloat(x) / 800));
+        if (name == 'armadillo.obj')
+          coords.push(elements.map(x => parseFloat(x) / 8));
         else
           coords.push(elements);
+        //if (name == 'bunny.obj')
+        //  coords.push(elements.map(x => parseFloat(x) / 800));
+        //else
+        //  coords.push(elements);
       } else if (elements[0] == 'f') {
         elements.shift();
         elements = elements.map(x => x.split('//')[0])
@@ -125,13 +124,11 @@ export default class Mesh {
     this.texColorMap = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, this.texColorMap);
 
-    // Set the parameters so we can render any size image.
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
 
-    // Upload the image into the texture.
     const texData = [
       213, 62, 79, 255,
       244, 109, 67, 255,
@@ -146,7 +143,6 @@ export default class Mesh {
     const size = [8, 1];
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA32F, size[0], size[1], 0, gl.RGBA, gl.FLOAT, new Float32Array(texData));
 
-    // set which texture units to render with.
     gl.activeTexture(gl.TEXTURE0);
     gl.uniform1i(this.uColorMap, 0);
   }
@@ -183,16 +179,13 @@ export default class Mesh {
   }
 
   draw(gl, cam, light) {
-    // faces orientadas no sentido anti-horário
     gl.frontFace(gl.CCW);
 
-    // face culling
     gl.enable(gl.CULL_FACE);
     gl.cullFace(gl.BACK);
     
     gl.useProgram(this.program);
 
-    // updates the model transformations
     this.updateModelMatrix();
 
     const model = this.model;

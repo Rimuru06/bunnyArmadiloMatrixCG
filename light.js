@@ -36,6 +36,6 @@ export default class Light {
   }
 
   updateLight() {
-    // TODO: Change light position
+    // FALTA AQUI
   }
 }

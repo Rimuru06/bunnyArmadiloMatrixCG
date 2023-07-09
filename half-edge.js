@@ -37,7 +37,6 @@ export class HalfEdgeDS {
   }
 
   build(coords, trigs) {
-    // construção dos vértices
     for (let vid = 0; vid < coords.length; vid+=4) {
       const x = coords[vid];
       const y = coords[vid + 1];
@@ -46,7 +45,6 @@ export class HalfEdgeDS {
       const v = new Vertex(vid / 4, x, y, z);
       this.vertices.push(v);
     }
-    // construção das faces & half-edges
     for (let tid = 0; tid < trigs.length; tid+=3) {
       const v0  = this.vertices[ trigs[tid + 0] -1 ];
       const v1  = this.vertices[ trigs[tid + 1] -1 ];
@@ -59,12 +57,10 @@ export class HalfEdgeDS {
       const face = new Face(he0);
       this.faces.push(face);
 
-      // atribuição das faces das half-edges
       he0.face = face;
       he1.face = face;
       he2.face = face;
 
-      // atribuição das next
       he0.next = he1;
       he1.next = he2;
       he2.next = he0;

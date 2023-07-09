@@ -8,7 +8,7 @@ class Scene {
     this.cam = new Camera(gl);
 
     // Luz
-    this.light = new Light(1);
+    this.light = new Light(1.0);
     this.light2 = new Light(1.6);
 
     // Mesh
@@ -17,10 +17,10 @@ class Scene {
   }
 
   async init(gl) {
-    await this.mesh.loadMeshV5('stanford-bunny.obj');
+    await this.mesh.loadMeshV5('bunny.obj');
     this.mesh.init(gl, this.light);
     
-    await this.copy.loadMeshV5('stanford-armadillo.obj');
+    await this.copy.loadMeshV5('armadillo.obj');
     this.copy.init(gl, this.light2);
   }
 
