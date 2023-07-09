@@ -72,10 +72,3 @@ window.onload = () => {
   window.ortho = false
   const app = new Main();
 }
-
-document.addEventListener('keydown', function(e){
-  if(e.key == "Enter")
-    window.ortho = !window.ortho;
-})
-
-
