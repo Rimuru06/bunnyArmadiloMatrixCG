@@ -8,29 +8,30 @@ class Scene {
     this.cam = new Camera(gl);
 
     // Luz
-    this.light = new Light(1.0);
-    this.light2 = new Light(1.6);
+    this.white = new Light('w');
+    this.yellow = new Light('y');
 
     // Mesh
-    this.mesh = new Mesh( 1.0);
-    this.copy = new Mesh( -1.0);
+    this.cuelo = new Mesh( 15.0, 'bunny.obj');
+    this.tatu = new Mesh( 0.0, 'armadillo.obj');
   }
 
   async init(gl) {
-    await this.mesh.loadMeshV5('bunny.obj');
-    this.mesh.init(gl, this.light);
-    
-    await this.copy.loadMeshV5('armadillo.obj');
-    this.copy.init(gl, this.light2);
+    await this.cuelo.loadMeshV5('bunny.obj');
+    await this.tatu.loadMeshV5('armadillo.obj');
+    this.cuelo.init(gl, this.white);
+    this.cuelo.init(gl, this.yellow);
+    this.tatu.init(gl, this.white);
+    this.tatu.init(gl, this.yellow);
   }
 
   draw(gl) {  
     this.cam.updateCam();
-    this.light.updateLight();
-    this.light2.updateLight();
+    this.white.updateLight();
+    this.yellow.updateLight();
 
-    this.mesh.draw(gl, this.cam, this.light, 'right');
-    this.copy.draw(gl, this.cam, this.light2, 'left');
+    this.cuelo.draw(gl, this.cam, 'right');
+    this.tatu.draw(gl, this.cam, 'left');
   }
 }
 
@@ -73,7 +74,7 @@ window.onload = () => {
 }
 
 document.addEventListener('keydown', function(e){
-  if(e.key == 'p')
+  if(e.key == "Enter")
     window.ortho = !window.ortho;
 })
 

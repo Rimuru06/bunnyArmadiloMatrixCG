@@ -1,16 +1,17 @@
 export default class Camera {
   constructor(gl) {
-    this.eye = vec3.fromValues(1.0, 1.0, 1.0);
+    this.eye = vec3.fromValues(10.0, 10.0, 10.0);
     this.at  = vec3.fromValues(0.0, 0.0, 0.0);
     this.up  = vec3.fromValues(0.0, 1.0, 0.0);
+    this.angle = 0.0;
 
     this.fovy = Math.PI / 2;
     this.aspect = gl.canvas.width / gl.canvas.height;
 
-    this.left = -2.5;
-    this.right = 2.5;
-    this.top = 2.5;
-    this.bottom = -2.5;
+    this.left = -10.5;
+    this.right = 10.5;
+    this.top = 10.5;
+    this.bottom = -10.5;
 
     this.near = 0;
     this.far = 1;
@@ -28,8 +29,10 @@ export default class Camera {
   }
 
   updateViewMatrix() {
-    mat4.identity( this.view );
+    mat4.identity(this.view);
+    this.eye = vec3.fromValues(25.0 * Math.sin(this.angle), 12.0, 25.0 * Math.cos(this.angle));
     mat4.lookAt(this.view, this.eye, this.at, this.up);
+    this.angle += 0.0125;
   }
 
   updateProjectionMatrix(type = '') {
@@ -45,5 +48,9 @@ export default class Camera {
   updateCam() {
     this.updateViewMatrix();
     this.updateProjectionMatrix(window.ortho ? 'ortho' : '');
+  }
+
+  getPosition(){
+    return this.eye;
   }
 }

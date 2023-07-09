@@ -5,9 +5,9 @@ import Shader from './shader.js';
 import { HalfEdgeDS } from './half-edge.js';
 
 export default class Mesh {
-  constructor(delta) {
+  constructor(delta, type) {
     this.heds = new HalfEdgeDS();
-
+    this.type = type;
     this.angle = 0;
     this.delta = delta;
     this.model = mat4.create();
@@ -43,13 +43,9 @@ export default class Mesh {
         elements.shift();
         elements.push('1.0')
         if (name == 'armadillo.obj')
-          coords.push(elements.map(x => parseFloat(x) / 8));
+          coords.push(elements.map(x => parseFloat(x) * 3));
         else
           coords.push(elements);
-        //if (name == 'bunny.obj')
-        //  coords.push(elements.map(x => parseFloat(x) / 800));
-        //else
-        //  coords.push(elements);
       } else if (elements[0] == 'f') {
         elements.shift();
         elements = elements.map(x => x.split('//')[0])
@@ -152,33 +148,26 @@ export default class Mesh {
     this.createUniforms(gl);
     this.heds.estrela(2);
     this.createVAO(gl);
-    //this.createTex(gl);
     light.createUniforms(gl, this.program);
 
   }
 
   updateModelMatrix() {
-    this.angle += 0.005;
-
+    this.angle += 0.01;
     mat4.identity(this.model);
+
+    if (this.type=="armadillo.obj"){
+      mat4.rotateY(this.model, this.model, this.angle);
+    }
+    
+    if (this.type=="bunny.obj"){
+      mat4.rotateZ(this.model, this.model, this.angle);
+    }
+
     mat4.translate(this.model, this.model, [this.delta, 0, 0]);
-    // [1 0 0 delta, 0 1 0 0, 0 0 1 0, 0 0 0 1] * this.mat 
-
-    mat4.rotateY(this.model, this.model, this.angle);
-    // [ cos(this.angle) 0 -sin(this.angle) 0, 
-    //         0         1        0         0, 
-    //   sin(this.angle) 0  cos(this.angle) 0, 
-    //         0         0        0         1]
-    // * this.mat 
-    mat4.translate(this.model, this.model, [-0.25, -0.25, -0.25]);
-    //mat4.translate(this.model, this.model, [-0.25, -0.25, -0.25]);
-    // [1 0 0 -0.5, 0 1 0 -0.5, 0 0 1 -0.5, 0 0 0 1] * this.mat 
-
-    mat4.scale(this.model, this.model, [5, 5, 5]);
-    // [5 0 0 0, 0 5 0 0, 0 0 5 0, 0 0 0 1] * this.mat 
   }
 
-  draw(gl, cam, light) {
+  draw(gl, cam) {
     gl.frontFace(gl.CCW);
 
     gl.enable(gl.CULL_FACE);

@@ -1,16 +1,25 @@
 export default class Light {
-  constructor(multiplier) {
-    this.pos = vec4.fromValues(2.0 * multiplier, 2.0 * multiplier, 2.0 * multiplier, 1.0);
+  constructor(which) {
+    this.pos = vec4.fromValues(10.0, 10.0, 10.0, 1.0);
+    this.amb_c = vec4.fromValues(1.0, 1.0, 1.0, 1.0);
+    this.amb_k = 0.8;
 
-    this.amb_c = vec4.fromValues(1.0 * multiplier, 1.0 * multiplier, 1.0 * multiplier, 1.0);
-    this.amb_k = 0.2 * multiplier;
-
-    this.dif_c = vec4.fromValues(1.0 * multiplier, 1.0 * multiplier, 1.0 * multiplier, 1.0);
-    this.dif_k = 0.6 * multiplier;
-
-    this.esp_c = vec4.fromValues(1.0 * multiplier, 1.0 * multiplier, 1.0 * multiplier, 1.0);
-    this.esp_k = 0.3 * multiplier;
-    this.esp_p = 5.0 * multiplier;
+    if (which=='w'){
+      this.dif_c = vec4.fromValues(1.0, 1.0, 1.0, 1.0);
+      this.dif_k = 1;
+  
+      this.esp_c = vec4.fromValues(1.0, 1.0, 1.0, 1.0);
+      this.esp_k = 1;
+      this.esp_p = 1.0;
+    }
+    if (which=='y'){
+      this.dif_c = vec4.fromValues(1.0, 1.0, 0.0, 1.0);
+      this.dif_k = 10;
+  
+      this.esp_c = vec4.fromValues(1.0, 1.0, 1.0, 1.0);
+      this.esp_k = 1;
+      this.esp_p = 1.0;
+    }
   }
 
   createUniforms(gl, program) {
@@ -36,6 +45,6 @@ export default class Light {
   }
 
   updateLight() {
-    // FALTA AQUI
+    
   }
 }
