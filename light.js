@@ -1,3 +1,4 @@
+
 export default class Light {
   constructor(which) {
     this.pos = vec4.fromValues(10.0, 10.0, 10.0, 1.0);
@@ -6,7 +7,7 @@ export default class Light {
 
     if (which=='w'){
       this.dif_c = vec4.fromValues(1.0, 1.0, 1.0, 1.0);
-      this.dif_k = 1;
+      this.dif_k = 8.0;
   
       this.esp_c = vec4.fromValues(1.0, 1.0, 1.0, 1.0);
       this.esp_k = 1;

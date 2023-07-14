@@ -33,7 +33,7 @@ void main()
   vec4 viewNormal = transpose(inverse(modelView)) * fNormal;
   viewNormal = normalize(viewNormal);
 
-  vec4 viewLightPos = u_view * light_pos;
+  vec4 viewLightPos = u_view * light_pos * normalize(viewPosition);
 
   vec4 lightDir = normalize(viewLightPos - viewPosition);
 
